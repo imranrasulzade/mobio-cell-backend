@@ -1,0 +1,3 @@
+rootProject.name = 'mobio-cell-backend'
+
+include 'ms-common'
