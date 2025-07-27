@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: ms-notification
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: false
