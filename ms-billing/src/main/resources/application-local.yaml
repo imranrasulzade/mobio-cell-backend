@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: ms-billing
+  datasource:
+    url: jdbc:postgresql://localhost:5434/ms_billing
+    username: ms_billing
+    password: ms_billing
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: none

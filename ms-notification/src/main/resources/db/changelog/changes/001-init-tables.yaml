@@ -1,0 +1,134 @@
+databaseChangeLog:
+  # =======================
+  # notifications
+  # =======================
+  - changeSet:
+      id: 001-create-notifications
+      author: imran
+      changes:
+        - createTable:
+            tableName: notifications
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: number_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: message
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: VARCHAR(20)
+              - column:
+                  name: sent_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+  # =======================
+  # roles
+  # =======================
+  - changeSet:
+      id: 002-create-roles
+      author: imran
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+
+  # =======================
+  # api_endpoints
+  # =======================
+  - changeSet:
+      id: 003-create-api-endpoints
+      author: imran
+      changes:
+        - createTable:
+            tableName: api_endpoints
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: path
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: http_method
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_public
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: is_disabled
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+
+  # =======================
+  # role_api_permissions
+  # =======================
+  - changeSet:
+      id: 004-create-role-api-permissions
+      author: imran
+      changes:
+        - createTable:
+            tableName: role_api_permissions
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: role_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: api_endpoint_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: role_api_permissions
+            baseColumnNames: role_id
+            referencedTableName: roles
+            referencedColumnNames: id
+            constraintName: fk_role_permissions_role
+        - addForeignKeyConstraint:
+            baseTableName: role_api_permissions
+            baseColumnNames: api_endpoint_id
+            referencedTableName: api_endpoints
+            referencedColumnNames: id
+            constraintName: fk_role_permissions_api

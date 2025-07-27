@@ -1,0 +1,208 @@
+databaseChangeLog:
+  # =======================
+  # trans_sources
+  # =======================
+  - changeSet:
+      id: 001-create-trans-sources
+      author: 'Imran Rasulzade'
+      changes:
+        - createTable:
+            tableName: trans_sources
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: value
+                  type: INTEGER
+
+  # =======================
+  # trans_types
+  # =======================
+  - changeSet:
+      id: 002-create-trans-types
+      author: 'Imran Rasulzade'
+      changes:
+        - createTable:
+            tableName: trans_types
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  type: INTEGER
+
+  # =======================
+  # transactions
+  # =======================
+  - changeSet:
+      id: 003-create-transactions
+      author: 'Imran Rasulzade'
+      changes:
+        - createTable:
+            tableName: transactions
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: number_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: NUMERIC(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+              - column:
+                  name: source_id
+                  type: INTEGER
+              - column:
+                  name: type_id
+                  type: INTEGER
+        - addForeignKeyConstraint:
+            baseTableName: transactions
+            baseColumnNames: source_id
+            referencedTableName: trans_sources
+            referencedColumnNames: id
+            constraintName: fk_transactions_source
+        - addForeignKeyConstraint:
+            baseTableName: transactions
+            baseColumnNames: type_id
+            referencedTableName: trans_types
+            referencedColumnNames: id
+            constraintName: fk_transactions_type
+
+  # =======================
+  # roles
+  # =======================
+  - changeSet:
+      id: 004-create-roles
+      author: 'Imran Rasulzade'
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+
+  # =======================
+  # api_endpoints
+  # =======================
+  - changeSet:
+      id: 005-create-api-endpoints
+      author: 'Imran Rasulzade'
+      changes:
+        - createTable:
+            tableName: api_endpoints
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: path
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: http_method
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_public
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: is_disabled
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+
+  # =======================
+  # role_api_permissions
+  # =======================
+  - changeSet:
+      id: 006-create-role-api-permissions
+      author: 'Imran Rasulzade'
+      changes:
+        - createTable:
+            tableName: role_api_permissions
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: role_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: api_endpoint_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: role_api_permissions
+            baseColumnNames: role_id
+            referencedTableName: roles
+            referencedColumnNames: id
+            constraintName: fk_role_permissions_role
+        - addForeignKeyConstraint:
+            baseTableName: role_api_permissions
+            baseColumnNames: api_endpoint_id
+            referencedTableName: api_endpoints
+            referencedColumnNames: id
+            constraintName: fk_role_permissions_api

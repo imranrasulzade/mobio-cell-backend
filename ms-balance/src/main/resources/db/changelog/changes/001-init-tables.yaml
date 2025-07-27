@@ -1,0 +1,159 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-balances
+      author: 'Imran Rasulzade'
+      changes:
+        - createTable:
+            tableName: balances
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: phone_number_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: NUMERIC(10,2)
+                  defaultValueNumeric: 0.00
+              - column:
+                  name: last_updated
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+  - changeSet:
+      id: 002-create-balance-history
+      author: 'Imran Rasulzade'
+      changes:
+        - createTable:
+            tableName: balance_history
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: phone_number_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: old_amount
+                  type: NUMERIC(10,2)
+              - column:
+                  name: changed_amount
+                  type: NUMERIC(10,2)
+              - column:
+                  name: new_amount
+                  type: NUMERIC(10,2)
+              - column:
+                  name: operation_type
+                  type: VARCHAR(20)
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: transaction_id
+                  type: INTEGER
+
+  - changeSet:
+      id: 003-create-roles
+      author: 'Imran Rasulzade'
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+
+  - changeSet:
+      id: 004-create-api-endpoints
+      author: 'Imran Rasulzade'
+      changes:
+        - createTable:
+            tableName: api_endpoints
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: path
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: http_method
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_public
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: is_disabled
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+
+  - changeSet:
+      id: 005-create-role-api-permissions
+      author: 'Imran Rasulzade'
+      changes:
+        - createTable:
+            tableName: role_api_permissions
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: role_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: api_endpoint_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: role_api_permissions
+            baseColumnNames: role_id
+            referencedTableName: roles
+            referencedColumnNames: id
+            constraintName: fk_role_permissions_role
+        - addForeignKeyConstraint:
+            baseTableName: role_api_permissions
+            baseColumnNames: api_endpoint_id
+            referencedTableName: api_endpoints
+            referencedColumnNames: id
+            constraintName: fk_role_permissions_api

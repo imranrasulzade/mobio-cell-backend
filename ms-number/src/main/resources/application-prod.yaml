@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: ms-number
+  datasource:
+    url: jdbc:postgresql://ms-postgres:5432/ms_number
+    username: ms_number
+    password: ms_number
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: false
+
+  jpa:
+    hibernate:
+      ddl-auto: none

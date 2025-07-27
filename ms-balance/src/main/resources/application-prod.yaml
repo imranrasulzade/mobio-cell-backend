@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: ms-balance
+
+  datasource:
+    url: jdbc:postgresql://ms-postgres:5432/ms_balance
+    username: ms_balance
+    password: ms_balance
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: none

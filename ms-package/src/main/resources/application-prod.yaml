@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: ms-package
+  datasource:
+    url: jdbc:postgresql://ms-postgres:5432/ms_package
+    username: ms_package
+    password: ms_package
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: false
+
+  jpa:
+    hibernate:
+      ddl-auto: none

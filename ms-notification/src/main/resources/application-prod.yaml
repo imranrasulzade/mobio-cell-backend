@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: ms-notification
+  datasource:
+    url: jdbc:postgresql://ms-postgres:5432/ms_notification
+    username: ms_notification
+    password: ms_notification
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: false
+
+  jpa:
+    hibernate:
+      ddl-auto: none

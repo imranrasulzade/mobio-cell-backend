@@ -1,0 +1,104 @@
+-- ====================
+-- ms_auth
+-- ====================
+CREATE DATABASE ms_auth;
+CREATE USER ms_auth WITH ENCRYPTED PASSWORD 'ms_auth';
+GRANT ALL PRIVILEGES ON DATABASE ms_auth TO ms_auth;
+
+\connect ms_auth
+GRANT ALL PRIVILEGES ON SCHEMA public TO ms_auth;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO ms_auth;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO ms_auth;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON FUNCTIONS TO ms_auth;
+
+-- ====================
+-- ms_balance
+-- ====================
+CREATE DATABASE ms_balance;
+CREATE USER ms_balance WITH ENCRYPTED PASSWORD 'ms_balance';
+GRANT ALL PRIVILEGES ON DATABASE ms_balance TO ms_balance;
+
+\connect ms_balance
+GRANT ALL PRIVILEGES ON SCHEMA public TO ms_balance;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO ms_balance;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO ms_balance;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON FUNCTIONS TO ms_balance;
+
+-- ====================
+-- ms_billing
+-- ====================
+CREATE DATABASE ms_billing;
+CREATE USER ms_billing WITH ENCRYPTED PASSWORD 'ms_billing';
+GRANT ALL PRIVILEGES ON DATABASE ms_billing TO ms_billing;
+
+\connect ms_billing
+GRANT ALL PRIVILEGES ON SCHEMA public TO ms_billing;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO ms_billing;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO ms_billing;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON FUNCTIONS TO ms_billing;
+
+-- ====================
+-- ms_gateway
+-- ====================
+CREATE DATABASE ms_gateway;
+CREATE USER ms_gateway WITH ENCRYPTED PASSWORD 'ms_gateway';
+GRANT ALL PRIVILEGES ON DATABASE ms_gateway TO ms_gateway;
+
+\connect ms_gateway
+GRANT ALL PRIVILEGES ON SCHEMA public TO ms_gateway;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO ms_gateway;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO ms_gateway;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON FUNCTIONS TO ms_gateway;
+
+-- ====================
+-- ms_notification
+-- ====================
+CREATE DATABASE ms_notification;
+CREATE USER ms_notification WITH ENCRYPTED PASSWORD 'ms_notification';
+GRANT ALL PRIVILEGES ON DATABASE ms_notification TO ms_notification;
+
+\connect ms_notification
+GRANT ALL PRIVILEGES ON SCHEMA public TO ms_notification;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO ms_notification;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO ms_notification;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON FUNCTIONS TO ms_notification;
+
+-- ====================
+-- ms_package
+-- ====================
+CREATE DATABASE ms_package;
+CREATE USER ms_package WITH ENCRYPTED PASSWORD 'ms_package';
+GRANT ALL PRIVILEGES ON DATABASE ms_package TO ms_package;
+
+\connect ms_package
+GRANT ALL PRIVILEGES ON SCHEMA public TO ms_package;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO ms_package;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO ms_package;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON FUNCTIONS TO ms_package;
+
+-- ====================
+-- ms_user
+-- ====================
+CREATE DATABASE ms_user;
+CREATE USER ms_user WITH ENCRYPTED PASSWORD 'ms_user';
+GRANT ALL PRIVILEGES ON DATABASE ms_user TO ms_user;
+
+\connect ms_user
+GRANT ALL PRIVILEGES ON SCHEMA public TO ms_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO ms_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO ms_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON FUNCTIONS TO ms_user;
+
+-- ====================
+-- ms_number
+-- ====================
+CREATE DATABASE ms_number;
+CREATE USER ms_number WITH ENCRYPTED PASSWORD 'ms_number';
+GRANT ALL PRIVILEGES ON DATABASE ms_number TO ms_number;
+
+\connect ms_number
+ALTER SCHEMA public OWNER TO ms_number;
+GRANT ALL PRIVILEGES ON SCHEMA public TO ms_number;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO ms_number;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO ms_number;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON FUNCTIONS TO ms_number;

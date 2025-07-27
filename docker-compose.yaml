@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: ms-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - ms_pg_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ms-net
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: ms-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - ms-net
+
+  redis:
+    image: redis:7
+    container_name: ms-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - ms-net
+
+networks:
+  ms-net:
+
+volumes:
+  ms_pg_data:
