@@ -3,7 +3,7 @@
 ext {
     set('springBootVersion', '3.2.5')
     set('springDependencyManagementVersion', '1.1.4')
-    set('javaVersion', JavaVersion.VERSION_17)
+    set('javaVersion', JavaVersion.VERSION_21)
 }
 
 // just for note
