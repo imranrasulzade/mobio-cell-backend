@@ -20,7 +20,7 @@ public class PhoneNumber {
     private String number;
 
     @Column(name = "user_id", nullable = false)
-    private Integer userId;
+    private Long userId;
 
     @Column(name = "is_main")
     private Integer isMain = 0;

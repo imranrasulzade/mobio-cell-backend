@@ -26,6 +26,9 @@ public class User {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "status")
+    private Integer status;
+
     @PrePersist
     public void prePersist() {
         if (createdAt == null) {

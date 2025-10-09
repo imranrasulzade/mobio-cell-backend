@@ -3,10 +3,11 @@ package com.example.msuser.service.impl;
 import com.example.msuser.dto.UserProfileDto;
 import com.example.msuser.entity.UserProfile;
 import com.example.msuser.enums.ExceptionCode;
+import com.example.msuser.exception.AlreadyExistsException;
 import com.example.msuser.exception.NotFoundException;
 import com.example.msuser.mapper.UserProfileMapper;
 import com.example.msuser.repositories.UserProfileRepository;
-import com.example.msuser.response.ApiResponse;
+import com.example.msuser.baseModels.ApiResponse;
 import com.example.msuser.service.UserProfileService;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,10 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public ApiResponse<?> addNew(UserProfileDto dto, String lang) {
+        var exists = userProfileRepository.existsByUserId((dto.getUserId()));
+        if (exists) {
+            throw new AlreadyExistsException(ExceptionCode.USER_PROFILE_ALREADY_EXISTS);
+        }
         UserProfile userProfile = userProfileMapper.toEntity(dto);
         var saved = userProfileRepository.save(userProfile);
         Map<String, Long> map = new HashMap<>();

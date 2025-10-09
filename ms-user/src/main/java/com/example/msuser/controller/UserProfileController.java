@@ -1,7 +1,7 @@
 package com.example.msuser.controller;
 
 import com.example.msuser.dto.UserProfileDto;
-import com.example.msuser.response.ApiResponse;
+import com.example.msuser.baseModels.ApiResponse;
 import com.example.msuser.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

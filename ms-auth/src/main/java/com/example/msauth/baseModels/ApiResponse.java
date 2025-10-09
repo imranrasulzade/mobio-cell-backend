@@ -1,4 +1,4 @@
-package com.example.msuser.response;
+package com.example.msauth.baseModels;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

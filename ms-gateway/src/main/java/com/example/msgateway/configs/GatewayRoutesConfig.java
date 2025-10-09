@@ -18,6 +18,23 @@ public class GatewayRoutesConfig {
                                 "/api/${segment}"
                         ))
                         .uri("http://localhost:8081"))
+
+                .route("user-service", r -> r
+                        .path("/api/user-service/**")
+                        .filters(f -> f.rewritePath(
+                                "/api/user-service/(?<segment>.*)",
+                                "/api/${segment}"
+                        ))
+                        .uri("http://localhost:8082"))
+
+                .route("number-service", r -> r
+                        .path("/api/number-service/**")
+                        .filters(f -> f.rewritePath(
+                                "/api/number-service/(?<segment>.*)",
+                                "/api/${segment}"
+                        ))
+                        .uri("http://localhost:8083"))
+
                 .build();
     }
 }

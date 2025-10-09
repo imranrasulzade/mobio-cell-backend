@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-status-column-to-users
+      author: imran
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: status
+                  type: int
+                  defaultValueNumeric: 0
+                  remarks: "User status (0 - inactive, 1 - active, etc.)"

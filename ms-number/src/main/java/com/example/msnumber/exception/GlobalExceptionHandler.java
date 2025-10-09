@@ -1,7 +1,8 @@
-package com.example.msuser.exception;
+package com.example.msnumber.exception;
 
-import com.example.msuser.baseModels.ApiResponse;
-import com.example.msuser.service.ExceptionMessageService;
+import com.example.msnumber.baseModels.ApiResponse;
+import com.example.msnumber.exception.BaseException;
+import com.example.msnumber.service.ExceptionMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

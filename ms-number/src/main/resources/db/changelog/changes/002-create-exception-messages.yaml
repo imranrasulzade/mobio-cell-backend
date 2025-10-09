@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-create-exception-messages-table
+      author: imran
+      changes:
+        - createTable:
+            tableName: exception_messages
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: code
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lang
+                  type: VARCHAR(5)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: message
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: false
+
+        - addUniqueConstraint:
+            tableName: exception_messages
+            columnNames: code, lang
+            constraintName: uq_exception_messages_code_lang

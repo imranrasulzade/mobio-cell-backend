@@ -1,4 +1,4 @@
-package com.example.msuser.enums;
+package com.example.msnumber.enums;
 
 public enum ExceptionCode {
     USER_PROFILE_NOT_FOUND,
@@ -6,5 +6,6 @@ public enum ExceptionCode {
     VALIDATION_ERROR,
     INTERNAL_SERVER_ERROR,
     USER_PROFILE_ALREADY_EXISTS,
-    USER_ALREADY_EXISTS
+    USER_ALREADY_EXISTS,
+    PHONE_NUMBER_ALREADY_EXISTS,
 }
