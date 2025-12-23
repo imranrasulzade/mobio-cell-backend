@@ -10,12 +10,12 @@ spring:
 
   cloud:
     vault:
-      uri: http://localhost:8200
-      token: hvs.1TPbzLJjZbR9AVc7HtznFtKK
+      uri: ${VAULT_ADDR} #http://localhost:8200
+      token: ${VAULT_TOKEN}
       kv:
         enabled: true
         backend: develop
-        application-name: mobiocell_dev
+        application-name: ${VAULT_APP_NAME} #mobiocell_dev
 
   datasource:
     url: ${db_url}
