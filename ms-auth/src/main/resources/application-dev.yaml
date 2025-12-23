@@ -6,16 +6,16 @@ spring:
     name: ms-auth
 
   config:
-    import: "vault://"
+    import:
 
   cloud:
     vault:
-      uri: ${VAULT_ADDR} #http://localhost:8200
+      uri: ${VAULT_ADDR}
       token: ${VAULT_TOKEN}
       kv:
         enabled: true
-        backend: develop
-        application-name: ${VAULT_APP_NAME} #mobiocell_dev
+        backend: ${DEVELOPMENT_PROFILE}
+        application-name: ${VAULT_APP_NAME}
 
   datasource:
     url: ${db_url}
