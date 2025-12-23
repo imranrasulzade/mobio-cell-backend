@@ -8,30 +8,58 @@ import com.example.msauth.entity.User;
 import com.example.msauth.enums.ExceptionCode;
 import com.example.msauth.exception.AlreadyExistsException;
 import com.example.msauth.exception.InvalidRequestException;
+import com.example.msauth.exception.NotFoundException;
 import com.example.msauth.request.PhoneNumberRequest;
 import com.example.msauth.request.SignInRequest;
 import com.example.msauth.request.SignUpRequest;
 import com.example.msauth.response.UserResponse;
 import com.example.msauth.service.AuthService;
 import com.example.msauth.repositories.UserRepository;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
+    private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final UserProfileClient userProfileClient;
     private final NumberClient numberClient;
+    private final JwtService jwtService;
 
-    public AuthServiceImpl(UserRepository userRepository, UserProfileClient userProfileClient, NumberClient numberClient) {
+    public AuthServiceImpl(UserRepository userRepository, UserProfileClient userProfileClient, NumberClient numberClient,
+                           AuthenticationManager authenticationManager, JwtService jwtService) {
         this.userRepository = userRepository;
         this.userProfileClient = userProfileClient;
         this.numberClient = numberClient;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     @Override
     public ApiResponse<?> signIn(SignInRequest request, String lang) {
-        return null;
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getPhone(),
+                        request.getPassword()
+                )
+        );
+
+        User user = userRepository.findByPhone(request.getPhone())
+                .orElseThrow(() -> new NotFoundException(ExceptionCode.USER_NOT_FOUND));
+
+        String token = jwtService.createToken(user);
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("userId", user.getId());
+        response.put("phone", user.getPhone());
+
+        return ApiResponse.success(response);
     }
 
     @Override

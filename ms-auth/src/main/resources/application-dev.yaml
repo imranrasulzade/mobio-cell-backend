@@ -1,0 +1,37 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: ms-auth
+
+  config:
+    import: "vault://"
+
+  cloud:
+    vault:
+      uri: http://localhost:8200
+      token: hvs.1TPbzLJjZbR9AVc7HtznFtKK
+      kv:
+        enabled: true
+        backend: develop
+        application-name: mobiocell_dev
+
+  datasource:
+    url: ${db_url}
+    username: ${db_username}
+    password: ${db_password}
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+application:
+  security:
+    jwt:
+      secret-key: ${jwt_secret_key}
+      expiration: ${jwt_expiration}

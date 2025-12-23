@@ -32,8 +32,22 @@ services:
     networks:
       - ms-net
 
+  vault:
+    image: hashicorp/vault:latest
+    container_name: vault
+    ports:
+      - "8200:8200"
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - ./vault/config:/vault/config
+      - vault-data:/vault/file
+    command: vault server -config=/vault/config/config.hcl
+    environment:
+      VAULT_ADDR: "http://0.0.0.0:8200"
 networks:
   ms-net:
 
 volumes:
   ms_pg_data:
+  vault-data:
