@@ -1,0 +1,37 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: ms-auth
+
+  config:
+    import:
+
+  cloud:
+    vault:
+      uri: ${VAULT_ADDR}
+      token: ${VAULT_TOKEN}
+      kv:
+        enabled: true
+        backend: ${DEVELOPMENT_PROFILE}
+        application-name: ${VAULT_APP_NAME}
+
+  datasource:
+    url: ${db_url}
+    username: ${db_username}
+    password: ${db_password}
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+application:
+  security:
+    jwt:
+      secret-key: ${jwt_secret_key}
+      expiration: ${jwt_expiration}
