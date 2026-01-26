@@ -35,6 +35,14 @@ public class GatewayRoutesConfig {
                         ))
                         .uri("http://localhost:8083"))
 
+                .route("balance-service", r -> r
+                        .path("/api/balance-service/**")
+                        .filters(f -> f.rewritePath(
+                                "/api/balance-service/(?<segment>.*)",
+                                "/api/${segment}"
+                        ))
+                        .uri("http://localhost:8084"))
+
                 .build();
     }
 }
