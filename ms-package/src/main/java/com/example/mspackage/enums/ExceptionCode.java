@@ -1,0 +1,12 @@
+package com.example.mspackage.enums;
+
+public enum ExceptionCode {
+    USER_PROFILE_NOT_FOUND,
+    USER_NOT_FOUND,
+    VALIDATION_ERROR,
+    INTERNAL_SERVER_ERROR,
+    USER_PROFILE_ALREADY_EXISTS,
+    USER_ALREADY_EXISTS,
+    PASSWORD_CANNOT_MATCH,
+    PACKAGE_NOT_FOUND,
+}

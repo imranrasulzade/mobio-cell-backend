@@ -1,8 +1,11 @@
-package com.example.msnumber.configs;
+package com.example.mspackage.configs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -54,39 +57,6 @@ public class RabbitConfig {
   }
 
   // ---- Topology (Exchange/Queue/DLQ) ----
-
-  @Bean
-  public DirectExchange appExchange() {
-    return new DirectExchange(RabbitTopologyProps.NUMBER_BALANCE_EXCHANGE, true, false);
-  }
-
-  @Bean
-  public DirectExchange deadLetterExchange() {
-    return new DirectExchange(RabbitTopologyProps.NUMBER_BALANCE_DLX, true, false);
-  }
-
-  @Bean
-  public Queue appQueue() {
-    Map<String, Object> args = new HashMap<>();
-    args.put("x-dead-letter-exchange", RabbitTopologyProps.NUMBER_BALANCE_DLX);
-    args.put("x-dead-letter-routing-key", RabbitTopologyProps.NUMBER_BALANCE_DLQ);
-    return new Queue(RabbitTopologyProps.NUMBER_BALANCE_QUEUE, true, false, false, args);
-  }
-
-  @Bean
-  public Queue deadLetterQueue() {
-    return new Queue(RabbitTopologyProps.NUMBER_BALANCE_DLQ, true);
-  }
-
-  @Bean
-  public Binding appBinding(Queue appQueue, DirectExchange appExchange) {
-    return BindingBuilder.bind(appQueue).to(appExchange).with(RabbitTopologyProps.NUMBER_BALANCE_ROUTING_KEY);
-  }
-
-  @Bean
-  public Binding dlqBinding(Queue deadLetterQueue, DirectExchange deadLetterExchange) {
-    return BindingBuilder.bind(deadLetterQueue).to(deadLetterExchange).with(RabbitTopologyProps.NUMBER_BALANCE_DLQ);
-  }
 
     @Bean
     public DirectExchange appNumberPackageExchange() {

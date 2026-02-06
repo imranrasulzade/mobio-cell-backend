@@ -52,8 +52,12 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
         }
         var saved = phoneNumberRepository.save(phoneNumberMapper.toEntity(req));
         var payload = saved.getId();
-        var event = BaseEvent.of("init_new.number", 1, payload);
-        eventPublisher.publish(event);
+        var balanceEvent = BaseEvent.of("init_new.number", 1, payload);
+        var packageEvent = BaseEvent.of("default.package", 1, payload);
+        eventPublisher.publishToNumberBalance(balanceEvent);
+        log.info("publishToNumberBalance published: {}", payload);
+        eventPublisher.publishToNumberPackage(packageEvent);
+        log.info("publishToNumberPackage published: {}", payload);
         return ApiResponse.success(phoneNumberMapper.toResponse(saved));
     }
 

@@ -43,6 +43,14 @@ public class GatewayRoutesConfig {
                         ))
                         .uri("http://localhost:8084"))
 
+                .route("package-service", r -> r
+                        .path("/api/package-service/**")
+                        .filters(f -> f.rewritePath(
+                                "/api/package-service/(?<segment>.*)",
+                                "/api/${segment}"
+                        ))
+                        .uri("http://localhost:8085"))
+
                 .build();
     }
 }

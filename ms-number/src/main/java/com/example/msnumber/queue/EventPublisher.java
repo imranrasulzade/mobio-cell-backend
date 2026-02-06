@@ -12,7 +12,7 @@ public class EventPublisher {
 
   private final RabbitTemplate rabbitTemplate;
 
-  public <T> void publish(BaseEvent<T> event) {
+  public <T> void publishToNumberBalance(BaseEvent<T> event) {
     rabbitTemplate.convertAndSend(
             RabbitTopologyProps.NUMBER_BALANCE_EXCHANGE,
             RabbitTopologyProps.NUMBER_BALANCE_ROUTING_KEY,
@@ -24,4 +24,18 @@ public class EventPublisher {
         }
     );
   }
+
+    public <T> void publishToNumberPackage(BaseEvent<T> event) {
+        rabbitTemplate.convertAndSend(
+                RabbitTopologyProps.NUMBER_PACKAGE_EXCHANGE,
+                RabbitTopologyProps.NUMBER_PACKAGE_ROUTING_KEY,
+                event,
+                message -> {
+                    message.getMessageProperties().setHeader("eventType", event.getType());
+                    message.getMessageProperties().setHeader("eventVersion", event.getVersion());
+                    return message;
+                }
+        );
+    }
+
 }
