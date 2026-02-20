@@ -66,7 +66,17 @@ public class JwtValidationGlobalFilter implements GlobalFilter, Ordered {
                 return unauthorized(exchange, "token_expired");
             }
 
-            return chain.filter(exchange);
+            String userId = claims.get("user_id") != null ? String.valueOf(claims.get("user_id")) : null;
+            String userRole = claims.get("role") != null ? String.valueOf(claims.get("role")) : null;
+            ServerWebExchange mutatedExchange = exchange.mutate().request(r -> {
+                if (userId != null && !userId.isBlank()) {
+                    r.header("X-User-Id", userId);
+                }
+                if (userRole != null && !userRole.isBlank()) {
+                    r.header("X-User-Role", userRole);
+                }
+            }).build();
+            return chain.filter(mutatedExchange);
 
         } catch (ExpiredJwtException e) {
             return unauthorized(exchange, "token_expired");

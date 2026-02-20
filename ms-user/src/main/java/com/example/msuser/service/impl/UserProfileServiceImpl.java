@@ -10,6 +10,7 @@ import com.example.msuser.repositories.UserProfileRepository;
 import com.example.msuser.baseModels.ApiResponse;
 import com.example.msuser.service.UserProfileService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +47,25 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<?> updateUserProfile(UserProfileDto dto, String lang) {
-        return null; // TODO yaz
+        UserProfile existing = userProfileRepository.findByUserId(dto.getUserId())
+                .orElseThrow(() -> new NotFoundException(ExceptionCode.USER_PROFILE_NOT_FOUND));
+        existing.setFirstName(dto.getFirstName());
+        existing.setLastName(dto.getLastName());
+        existing.setBirthDate(dto.getBirthDate());
+        existing.setEmail(dto.getEmail());
+        existing.setRoleId(dto.getRoleId());
+        UserProfile saved = userProfileRepository.save(existing);
+        return ApiResponse.success(userProfileMapper.toDto(saved));
+    }
+
+    @Override
+    @Transactional
+    public ApiResponse<?> deleteByUserId(Long userId, String lang) {
+        UserProfile existing = userProfileRepository.findByUserId(userId)
+                .orElseThrow(() -> new NotFoundException(ExceptionCode.USER_PROFILE_NOT_FOUND));
+        userProfileRepository.delete(existing);
+        return ApiResponse.success("success", null);
     }
 }

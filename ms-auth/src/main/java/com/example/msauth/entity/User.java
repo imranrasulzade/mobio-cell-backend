@@ -3,6 +3,7 @@ package com.example.msauth.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -34,6 +35,9 @@ public class User implements UserDetails {
     @Column(name = "status")
     private Integer status;
 
+    @Column(name = "role", nullable = false, length = 30)
+    private String role = "USER";
+
     @PrePersist
     public void prePersist() {
         if (createdAt == null) {
@@ -43,7 +47,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role));
     }
 
     @Override

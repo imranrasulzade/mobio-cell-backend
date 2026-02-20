@@ -13,3 +13,19 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        default-requeue-rejected: false
+
+application:
+  security:
+    internal-key: mobio-local-internal-key
+
+server:
+  port: 8087

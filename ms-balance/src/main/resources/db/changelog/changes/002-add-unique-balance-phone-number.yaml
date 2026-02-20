@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-unique-balance-phone-number
+      author: Imran
+      changes:
+        - addUniqueConstraint:
+            tableName: balances
+            columnNames: phone_number_id
+            constraintName: uq_balances_phone_number_id

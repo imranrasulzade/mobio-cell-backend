@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007-seed-transaction-source-and-types
+      author: codex
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO trans_sources (name, description, value)
+              SELECT 'BALANCE_SERVICE', 'Balance service originated operation', 1
+              WHERE NOT EXISTS (SELECT 1 FROM trans_sources WHERE value = 1);
+
+              INSERT INTO trans_types (name, value)
+              SELECT 'TOPUP', 1
+              WHERE NOT EXISTS (SELECT 1 FROM trans_types WHERE value = 1);
+
+              INSERT INTO trans_types (name, value)
+              SELECT 'MINUTE_CONSUME', 2
+              WHERE NOT EXISTS (SELECT 1 FROM trans_types WHERE value = 2);
+
+              INSERT INTO trans_types (name, value)
+              SELECT 'OTHER', 3
+              WHERE NOT EXISTS (SELECT 1 FROM trans_types WHERE value = 3);

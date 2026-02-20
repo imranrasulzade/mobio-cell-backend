@@ -16,3 +16,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+
+application:
+  security:
+    internal-key: mobio-local-internal-key

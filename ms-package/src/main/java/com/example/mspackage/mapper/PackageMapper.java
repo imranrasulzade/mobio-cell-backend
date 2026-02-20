@@ -15,6 +15,8 @@ public class PackageMapper {
         entity.setValidityDays(request.getValidityDays());
         entity.setName(request.getName());
         entity.setPrice(request.getPrice());
+        entity.setMinuteRate(request.getMinuteRate());
+        entity.setIsDefault(request.getIsDefault() != null && request.getIsDefault() == 1 ? 1 : 0);
         return entity;
     }
 
@@ -24,6 +26,8 @@ public class PackageMapper {
         response.setName(entity.getName());
         response.setPrice(entity.getPrice());
         response.setId(entity.getId());
+        response.setMinuteRate(entity.getMinuteRate());
+        response.setIsDefault(entity.getIsDefault());
         return response;
     }
 

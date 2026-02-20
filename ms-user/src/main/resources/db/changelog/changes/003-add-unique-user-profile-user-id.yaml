@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-unique-user-profile-user-id
+      author: Imran
+      changes:
+        - addUniqueConstraint:
+            tableName: user_profiles
+            columnNames: user_id
+            constraintName: uq_user_profiles_user_id

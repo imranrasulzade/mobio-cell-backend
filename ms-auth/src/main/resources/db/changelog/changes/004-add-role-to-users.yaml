@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-role-column-to-users
+      author: imran
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: role
+                  type: VARCHAR(30)
+                  defaultValue: USER
+                  remarks: "Application role used by Spring Security"
+                  constraints:
+                    nullable: false

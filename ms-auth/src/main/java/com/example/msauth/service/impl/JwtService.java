@@ -53,7 +53,11 @@ public class JwtService {
 
         Date tokenCreateTime = new Date();
         Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
+        Map<String, Object> claimsMap = new HashMap<>();
+        claimsMap.put("user_id", user.getId());
+        claimsMap.put("role", user.getRole() != null && !user.getRole().isBlank() ? user.getRole() : "USER");
         JwtBuilder jwtBuilder = Jwts.builder()
+                .claims(claimsMap)
                 .subject(user.getPhone())          // setSubject()
                 .issuedAt(new Date())              // setIssuedAt()
                 .expiration(tokenValidity)         // setExpiration()

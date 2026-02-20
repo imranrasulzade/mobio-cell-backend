@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-seed-rbac-for-balance-apis
+      author: codex
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO roles (name, description)
+              SELECT 'ADMIN', 'System administrator'
+              WHERE NOT EXISTS (SELECT 1 FROM roles WHERE name = 'ADMIN');
+
+              INSERT INTO roles (name, description)
+              SELECT 'USER', 'Regular user'
+              WHERE NOT EXISTS (SELECT 1 FROM roles WHERE name = 'USER');
+
+              INSERT INTO api_endpoints (path, http_method, is_public, is_disabled)
+              SELECT '/api/balances/{numberId}', 'GET', false, false
+              WHERE NOT EXISTS (SELECT 1 FROM api_endpoints WHERE path = '/api/balances/{numberId}' AND http_method = 'GET');
+
+              INSERT INTO api_endpoints (path, http_method, is_public, is_disabled)
+              SELECT '/api/balances/{numberId}/history', 'GET', false, false
+              WHERE NOT EXISTS (SELECT 1 FROM api_endpoints WHERE path = '/api/balances/{numberId}/history' AND http_method = 'GET');
+
+              INSERT INTO api_endpoints (path, http_method, is_public, is_disabled)
+              SELECT '/api/balances/{numberId}/topup', 'POST', false, false
+              WHERE NOT EXISTS (SELECT 1 FROM api_endpoints WHERE path = '/api/balances/{numberId}/topup' AND http_method = 'POST');
+
+              INSERT INTO api_endpoints (path, http_method, is_public, is_disabled)
+              SELECT '/api/balances/{numberId}/consume-minutes', 'POST', false, false
+              WHERE NOT EXISTS (SELECT 1 FROM api_endpoints WHERE path = '/api/balances/{numberId}/consume-minutes' AND http_method = 'POST');
+
+              INSERT INTO api_endpoints (path, http_method, is_public, is_disabled)
+              SELECT '/api/balances/{numberId}', 'DELETE', false, false
+              WHERE NOT EXISTS (SELECT 1 FROM api_endpoints WHERE path = '/api/balances/{numberId}' AND http_method = 'DELETE');
+
+              INSERT INTO role_api_permissions (role_id, api_endpoint_id)
+              SELECT r.id, e.id FROM roles r JOIN api_endpoints e ON e.path = '/api/balances/{numberId}' AND e.http_method = 'GET'
+              WHERE r.name IN ('ADMIN', 'USER')
+              AND NOT EXISTS (SELECT 1 FROM role_api_permissions rap WHERE rap.role_id = r.id AND rap.api_endpoint_id = e.id);
+
+              INSERT INTO role_api_permissions (role_id, api_endpoint_id)
+              SELECT r.id, e.id FROM roles r JOIN api_endpoints e ON e.path = '/api/balances/{numberId}/history' AND e.http_method = 'GET'
+              WHERE r.name IN ('ADMIN', 'USER')
+              AND NOT EXISTS (SELECT 1 FROM role_api_permissions rap WHERE rap.role_id = r.id AND rap.api_endpoint_id = e.id);
+
+              INSERT INTO role_api_permissions (role_id, api_endpoint_id)
+              SELECT r.id, e.id FROM roles r JOIN api_endpoints e ON e.path = '/api/balances/{numberId}/topup' AND e.http_method = 'POST'
+              WHERE r.name IN ('ADMIN', 'USER')
+              AND NOT EXISTS (SELECT 1 FROM role_api_permissions rap WHERE rap.role_id = r.id AND rap.api_endpoint_id = e.id);
+
+              INSERT INTO role_api_permissions (role_id, api_endpoint_id)
+              SELECT r.id, e.id FROM roles r JOIN api_endpoints e ON e.path = '/api/balances/{numberId}/consume-minutes' AND e.http_method = 'POST'
+              WHERE r.name IN ('ADMIN', 'USER')
+              AND NOT EXISTS (SELECT 1 FROM role_api_permissions rap WHERE rap.role_id = r.id AND rap.api_endpoint_id = e.id);
+
+              INSERT INTO role_api_permissions (role_id, api_endpoint_id)
+              SELECT r.id, e.id FROM roles r JOIN api_endpoints e ON e.path = '/api/balances/{numberId}' AND e.http_method = 'DELETE'
+              WHERE r.name = 'ADMIN'
+              AND NOT EXISTS (SELECT 1 FROM role_api_permissions rap WHERE rap.role_id = r.id AND rap.api_endpoint_id = e.id);

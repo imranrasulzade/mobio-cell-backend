@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -31,8 +31,12 @@ public class PackageServiceImpl implements PackageService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<?> createPackage(PackageRequest packageRequest) {
         log.info("createPackage start");
+        if (packageRequest.getIsDefault() != null && packageRequest.getIsDefault() == 1) {
+            packageRepository.clearDefaultFlags();
+        }
         Package packageEntity = PackageMapper.toEntity(packageRequest);
         var saved = packageRepository.save(packageEntity);
         log.info("createPackage end");
@@ -42,16 +46,22 @@ public class PackageServiceImpl implements PackageService {
     @Override
     public ApiResponse<?> deletePackage(Long id) {
         log.info("deletePackage start");
-        packageRepository.deleteById(id);
+        Package existingPackage = packageRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(ExceptionCode.PACKAGE_NOT_FOUND));
+        packageRepository.delete(existingPackage);
         log.info("deletePackage end");
         return ApiResponse.success("success", null);
     }
 
     @Override
+    @Transactional
     public ApiResponse<?> updatePackage(Long id, PackageRequest packageRequest) {
         log.info("updatePackage start id={}", id);
         Package existingPackage = packageRepository.findById(id)
                 .orElseThrow(()-> new NotFoundException(ExceptionCode.PACKAGE_NOT_FOUND));
+        if (packageRequest.getIsDefault() != null && packageRequest.getIsDefault() == 1) {
+            packageRepository.clearDefaultFlags();
+        }
         Package packageEntity = PackageMapper.toExistingEntity(packageRequest, existingPackage);
         var saved = packageRepository.save(packageEntity);
         log.info("updatePackage end id={}", id);

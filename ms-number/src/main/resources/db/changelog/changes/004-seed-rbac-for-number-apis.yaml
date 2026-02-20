@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-seed-rbac-for-number-apis
+      author: codex
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO roles (name, description)
+              SELECT 'ADMIN', 'System administrator'
+              WHERE NOT EXISTS (SELECT 1 FROM roles WHERE name = 'ADMIN');
+
+              INSERT INTO roles (name, description)
+              SELECT 'USER', 'Regular user'
+              WHERE NOT EXISTS (SELECT 1 FROM roles WHERE name = 'USER');
+
+              INSERT INTO api_endpoints (path, http_method, is_public, is_disabled)
+              SELECT '/api/phone-numbers/{numberId}', 'GET', false, false
+              WHERE NOT EXISTS (SELECT 1 FROM api_endpoints WHERE path = '/api/phone-numbers/{numberId}' AND http_method = 'GET');
+
+              INSERT INTO api_endpoints (path, http_method, is_public, is_disabled)
+              SELECT '/api/phone-numbers/by-user/{userId}', 'GET', false, false
+              WHERE NOT EXISTS (SELECT 1 FROM api_endpoints WHERE path = '/api/phone-numbers/by-user/{userId}' AND http_method = 'GET');
+
+              INSERT INTO api_endpoints (path, http_method, is_public, is_disabled)
+              SELECT '/api/phone-numbers', 'POST', false, false
+              WHERE NOT EXISTS (SELECT 1 FROM api_endpoints WHERE path = '/api/phone-numbers' AND http_method = 'POST');
+
+              INSERT INTO api_endpoints (path, http_method, is_public, is_disabled)
+              SELECT '/api/phone-numbers/me', 'POST', false, false
+              WHERE NOT EXISTS (SELECT 1 FROM api_endpoints WHERE path = '/api/phone-numbers/me' AND http_method = 'POST');
+
+              INSERT INTO api_endpoints (path, http_method, is_public, is_disabled)
+              SELECT '/api/phone-numbers/by-user/{userId}', 'DELETE', false, false
+              WHERE NOT EXISTS (SELECT 1 FROM api_endpoints WHERE path = '/api/phone-numbers/by-user/{userId}' AND http_method = 'DELETE');
+
+              INSERT INTO role_api_permissions (role_id, api_endpoint_id)
+              SELECT r.id, e.id FROM roles r JOIN api_endpoints e ON e.path = '/api/phone-numbers/{numberId}' AND e.http_method = 'GET'
+              WHERE r.name IN ('ADMIN', 'USER')
+              AND NOT EXISTS (SELECT 1 FROM role_api_permissions rap WHERE rap.role_id = r.id AND rap.api_endpoint_id = e.id);
+
+              INSERT INTO role_api_permissions (role_id, api_endpoint_id)
+              SELECT r.id, e.id FROM roles r JOIN api_endpoints e ON e.path = '/api/phone-numbers/by-user/{userId}' AND e.http_method = 'GET'
+              WHERE r.name = 'ADMIN'
+              AND NOT EXISTS (SELECT 1 FROM role_api_permissions rap WHERE rap.role_id = r.id AND rap.api_endpoint_id = e.id);
+
+              INSERT INTO role_api_permissions (role_id, api_endpoint_id)
+              SELECT r.id, e.id FROM roles r JOIN api_endpoints e ON e.path = '/api/phone-numbers' AND e.http_method = 'POST'
+              WHERE r.name IN ('ADMIN', 'USER')
+              AND NOT EXISTS (SELECT 1 FROM role_api_permissions rap WHERE rap.role_id = r.id AND rap.api_endpoint_id = e.id);
+
+              INSERT INTO role_api_permissions (role_id, api_endpoint_id)
+              SELECT r.id, e.id FROM roles r JOIN api_endpoints e ON e.path = '/api/phone-numbers/me' AND e.http_method = 'POST'
+              WHERE r.name = 'USER'
+              AND NOT EXISTS (SELECT 1 FROM role_api_permissions rap WHERE rap.role_id = r.id AND rap.api_endpoint_id = e.id);
+
+              INSERT INTO role_api_permissions (role_id, api_endpoint_id)
+              SELECT r.id, e.id FROM roles r JOIN api_endpoints e ON e.path = '/api/phone-numbers/by-user/{userId}' AND e.http_method = 'DELETE'
+              WHERE r.name = 'ADMIN'
+              AND NOT EXISTS (SELECT 1 FROM role_api_permissions rap WHERE rap.role_id = r.id AND rap.api_endpoint_id = e.id);

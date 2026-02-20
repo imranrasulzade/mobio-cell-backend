@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-add-default-and-minute-rate-to-packages
+      author: codex
+      changes:
+        - addColumn:
+            tableName: packages
+            columns:
+              - column:
+                  name: minute_rate
+                  type: NUMERIC(10,4)
+                  defaultValueNumeric: 0.0500
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_default
+                  type: INTEGER
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: packages
+            columnNames: name
+            constraintName: uq_packages_name
+  - changeSet:
+      id: 004-seed-default-packages
+      author: codex
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO packages (name, price, validity_days, minute_rate, is_default)
+              SELECT 'Default Starter', 0.00, 30, 0.0500, 1
+              WHERE NOT EXISTS (SELECT 1 FROM packages WHERE is_default = 1);
+
+              INSERT INTO packages (name, price, validity_days, minute_rate, is_default)
+              SELECT 'Standard Talk', 5.00, 30, 0.0400, 0
+              WHERE NOT EXISTS (SELECT 1 FROM packages WHERE name = 'Standard Talk');

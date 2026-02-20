@@ -92,4 +92,14 @@ public class RabbitConfig {
   public Binding dlqBinding(Queue deadLetterQueue, DirectExchange deadLetterExchange) {
     return BindingBuilder.bind(deadLetterQueue).to(deadLetterExchange).with(RabbitTopologyProps.NUMBER_BALANCE_DLQ);
   }
+
+  @Bean
+  public DirectExchange balanceBillingExchange() {
+    return new DirectExchange(RabbitTopologyProps.BALANCE_BILLING_EXCHANGE, true, false);
+  }
+
+  @Bean
+  public DirectExchange balanceNotificationExchange() {
+    return new DirectExchange(RabbitTopologyProps.BALANCE_NOTIFICATION_EXCHANGE, true, false);
+  }
 }

@@ -32,6 +32,7 @@ spring:
 
 application:
   security:
+    internal-key: ${internal_service_key}
     jwt:
       secret-key: ${jwt_secret_key}
       expiration: ${jwt_expiration}

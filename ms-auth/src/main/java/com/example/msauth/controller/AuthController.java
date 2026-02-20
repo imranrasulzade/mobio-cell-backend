@@ -4,6 +4,7 @@ import com.example.msauth.baseModels.ApiResponse;
 import com.example.msauth.request.SignInRequest;
 import com.example.msauth.request.SignUpRequest;
 import com.example.msauth.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,13 +16,13 @@ public class AuthController {
 
     @PostMapping("/sign-in")
     public ApiResponse<?> signIn(@RequestHeader(name = "Accept-Language", defaultValue = "az") String lang,
-                                 @RequestBody SignInRequest request) {
+                                 @Valid @RequestBody SignInRequest request) {
         return authService.signIn(request, lang);
     }
 
     @PostMapping("/sign-up")
     public ApiResponse<?> signUp(@RequestHeader(name = "Accept-Language", defaultValue = "az") String lang,
-                                 @RequestBody SignUpRequest request) {
+                                 @Valid @RequestBody SignUpRequest request) {
         return authService.signUp(request, lang);
     }
 }

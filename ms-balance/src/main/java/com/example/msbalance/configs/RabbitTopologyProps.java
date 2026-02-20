@@ -7,5 +7,9 @@ public interface RabbitTopologyProps {
     String NUMBER_BALANCE_DLX = "app.number.balance.dlx";
     String NUMBER_BALANCE_DLQ = "app.number.balance.dlq";
 
+    String BALANCE_BILLING_EXCHANGE = "app.balance.billing.exchange";
+    String BALANCE_BILLING_ROUTING_KEY = "app.balance.billing.routingkey";
+    String BALANCE_NOTIFICATION_EXCHANGE = "app.balance.notification.exchange";
+    String BALANCE_NOTIFICATION_ROUTING_KEY = "app.balance.notification.routingkey";
 
 }

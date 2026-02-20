@@ -25,3 +25,7 @@ spring:
     listener:
       simple:
         default-requeue-rejected: false
+
+application:
+  security:
+    internal-key: mobio-local-internal-key

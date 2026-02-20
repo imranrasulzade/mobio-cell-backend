@@ -21,7 +21,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,29 +70,34 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    @Transactional
     public ApiResponse<UserResponse> signUp(SignUpRequest request, String lang) {
         log.info("signUp request: {}", request);
         validateRequest(request);
+        String normalizedPhone = request.getPhone().trim();
 
-        if (userRepository.existsByPhone(request.getPhone())) {
+        if (userRepository.existsByPhone(normalizedPhone)) {
             throw new AlreadyExistsException(ExceptionCode.USER_ALREADY_EXISTS);
         }
 
         User user = User.builder()
-                .phone(request.getPhone())
+                .phone(normalizedPhone)
                 .password(passwordEncoder.encode(request.getPassword()))
                 .status(0)
+                .role(resolveRole(request.getRoleId()))
                 .build();
 
         User saved = userRepository.save(user);
+        boolean profileCreated = false;
+        boolean numberCreated = false;
 
         try {
             UserProfileDto profileDto = buildProfileDto(request, saved.getId());
             ensureSuccess(userProfileClient.addNew(lang, profileDto));
+            profileCreated = true;
 
-            PhoneNumberRequest phoneDto = buildPhoneNumberRequest(request.getPhone(), saved.getId());
+            PhoneNumberRequest phoneDto = buildPhoneNumberRequest(normalizedPhone, saved.getId());
             ensureSuccess(numberClient.addPhoneForUser(lang, phoneDto));
+            numberCreated = true;
 
             saved.setStatus(1); // active
             userRepository.save(saved);
@@ -101,6 +105,7 @@ public class AuthServiceImpl implements AuthService {
             return ApiResponse.success(new UserResponse(saved.getId(), saved.getPhone(), request.getRoleId()));
 
         } catch (RuntimeException ex) {
+            compensateUserCreation(saved.getId(), lang, profileCreated, numberCreated);
             userRepository.deleteById(saved.getId());
             throw ex;
         }
@@ -138,6 +143,27 @@ public class AuthServiceImpl implements AuthService {
                     ? response.getMessage()
                     : "Remote service error";
             throw new IllegalStateException(message);
+        }
+    }
+
+    private String resolveRole(Integer roleId) {
+        return roleId != null && roleId == 1 ? "ADMIN" : "USER";
+    }
+
+    private void compensateUserCreation(Long userId, String lang, boolean profileCreated, boolean numberCreated) {
+        if (numberCreated) {
+            try {
+                numberClient.deleteByUserId(lang, userId);
+            } catch (RuntimeException compensationEx) {
+                log.error("Number compensation failed for userId={}", userId, compensationEx);
+            }
+        }
+        if (profileCreated) {
+            try {
+                userProfileClient.deleteByUserId(lang, userId);
+            } catch (RuntimeException compensationEx) {
+                log.error("Profile compensation failed for userId={}", userId, compensationEx);
+            }
         }
     }
 }

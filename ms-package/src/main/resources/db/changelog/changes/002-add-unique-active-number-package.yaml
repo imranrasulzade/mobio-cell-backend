@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-unique-active-number-package
+      author: Imran
+      changes:
+        - addUniqueConstraint:
+            tableName: numbers_packages
+            columnNames: phone_number_id, package_id, is_active
+            constraintName: uq_numbers_package_active

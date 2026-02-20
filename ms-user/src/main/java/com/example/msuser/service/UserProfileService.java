@@ -7,4 +7,5 @@ public interface UserProfileService {
     ApiResponse<?> addNew(UserProfileDto dto, String lang);
     ApiResponse<?> getByUserId(Long userId, String lang);
     ApiResponse<?> updateUserProfile(UserProfileDto dto, String lang);
+    ApiResponse<?> deleteByUserId(Long userId, String lang);
 }

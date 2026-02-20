@@ -9,9 +9,12 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.retry.RejectAndDontRequeueRecoverer;
+import org.springframework.amqp.rabbit.config.RetryInterceptorBuilder;
 import org.springframework.amqp.support.converter.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.aopalliance.aop.Advice;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,9 +54,18 @@ public class RabbitConfig {
 
     // sadə & stabil başlanğıc:
     factory.setDefaultRequeueRejected(false); // exception olarsa requeue etməsin (DLQ işləsin)
+    factory.setAdviceChain(packageRetryAdvice());
     // factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
 
     return factory;
+  }
+
+  @Bean
+  public Advice packageRetryAdvice() {
+    return RetryInterceptorBuilder.stateless()
+            .maxAttempts(5)
+            .recoverer(new RejectAndDontRequeueRecoverer())
+            .build();
   }
 
   // ---- Topology (Exchange/Queue/DLQ) ----

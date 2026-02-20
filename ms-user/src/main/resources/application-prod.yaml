@@ -13,3 +13,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+
+application:
+  security:
+    internal-key: ${internal_service_key:mobio-local-internal-key}

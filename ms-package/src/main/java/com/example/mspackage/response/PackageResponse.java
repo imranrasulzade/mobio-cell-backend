@@ -10,4 +10,6 @@ public class PackageResponse {
     private String name;
     private BigDecimal price;
     private Integer validityDays;
+    private BigDecimal minuteRate;
+    private Integer isDefault;
 }

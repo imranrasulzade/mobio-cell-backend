@@ -25,4 +25,10 @@ public class Package {
 
     @Column(name = "validity_days", nullable = false)
     private Integer validityDays;
+
+    @Column(name = "minute_rate", nullable = false, precision = 10, scale = 4)
+    private BigDecimal minuteRate;
+
+    @Column(name = "is_default", nullable = false)
+    private Integer isDefault = 0;
 }
