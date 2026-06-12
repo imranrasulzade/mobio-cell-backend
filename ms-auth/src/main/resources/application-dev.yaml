@@ -1,6 +1,9 @@
 server:
   port: 8081
 
+server:
+  forward-headers-strategy: framework
+
 spring:
   application:
     name: ms-auth

@@ -53,6 +53,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(body);
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiResponse<?>> handleNotFound(NotFoundException ex, Locale  locale) {
+        log.error("Not found exception", ex);
+        String lang = resolveLang(locale);
+        String message = messageService.getLocalizedMessage(ex.getCode(), lang);
+        ApiResponse<?> body = ApiResponse.error(ex.getStatus(), message);
+        return ResponseEntity.status(ex.getStatus()).body(body);
+    }
+
     // (null pointer, feign error, db down)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<?>> handleAny(Exception ex) {

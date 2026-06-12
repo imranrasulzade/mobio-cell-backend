@@ -12,6 +12,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -46,6 +47,10 @@ public class JwtValidationGlobalFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        if (HttpMethod.OPTIONS.equals(exchange.getRequest().getMethod())) {
+            return chain.filter(exchange);
+        }
+
         String path = exchange.getRequest().getPath().value();
 
         if (isWhitelisted(path)) {
@@ -127,14 +132,6 @@ public class JwtValidationGlobalFilter implements GlobalFilter, Ordered {
             if (matcher.match(pattern, path)) return true;
         }
         return false;
-    }
-
-    private String firstNonBlank(String... values) {
-        if (values == null) return null;
-        for (String v : values) {
-            if (StringUtils.hasText(v)) return v;
-        }
-        return null;
     }
 
     private Mono<Void> unauthorized(ServerWebExchange exchange, String code) {
